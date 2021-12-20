@@ -11,14 +11,14 @@ sRate = 2000
 chunkSize = 1
 
 INFO_TEXT = """
-1) the white LED is related to wireless data transfer. \n
-2) the red LED highlights errors or problems. \n
-*------------*-----------------------------------*----------------------*-------------------------*---------------* \n
-| n. flashes | 1                                 | 2                    | 3                       | 4             | \n
-*------------*-----------------------------------*----------------------*-------------------------*---------------* \n
-| white      | WiFi active                       | Connected to network | Connected to TCP socket | Data transfer | \n
-*------------*-----------------------------------*----------------------*-------------------------*---------------* \n
-| red        | Loss of data during WiFi transfer | -                    | Low battery level       | -             | \n
+1) the white LED is related to wireless data transfer.
+2) the red LED highlights errors or problems.
+*------------*-----------------------------------*----------------------*-------------------------*---------------*
+| n. flashes | 1                                 | 2                    | 3                       | 4             |
+*------------*-----------------------------------*----------------------*-------------------------*---------------*
+| white      | WiFi active                       | Connected to network | Connected to TCP socket | Data transfer |
+*------------*-----------------------------------*----------------------*-------------------------*---------------*
+| red        | Loss of data during WiFi transfer | -                    | Low battery level       | -             |
 *------------*-----------------------------------*----------------------*-------------------------*---------------*"
 """
 
@@ -126,17 +126,18 @@ def main():
         idx = 0
         print(" ", animation[idx % len(animation)], end="\n")
         while True:
-            print(idx + " Loop Iteration")
             data = recvall(client, nCh * sRate * chunkSize * 2)
             data = convert_data_to_ints(data, True)
             if bioelettronica_outlet.have_consumers():
                 bioelettronica_outlet.push_chunk(data)
+            print(data)
+
             print(" ", animation[idx % len(animation)], end="\r")
             print(data[0], end="\r")
             idx += 1
     except Exception as e:
-        print("!!! Exception: ", e,
-              ", server didn't respond with any data! Try restarting syncstation and probes! Check out the LEDs!")
+        print(e)
+        print("Server didn't respond with any data! Try restarting syncstation and probes! Check out the LEDs!")
         print("- 1 & 2 green led on syncstation must be ON")
         print(
             "- no red blinking on probes 1 and 2 should be present, if present single blink means DATA_LOSS, "
