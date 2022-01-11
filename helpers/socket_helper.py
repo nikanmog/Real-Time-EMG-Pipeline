@@ -1,4 +1,5 @@
 import struct
+import time
 
 
 def convert_data_to_ints(data, big_endian=True):
