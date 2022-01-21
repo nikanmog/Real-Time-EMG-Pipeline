@@ -23,3 +23,9 @@ STREAM_CLOSE_TEXT = """
 Stopping stream...
 Closing socket...
 """
+
+START_SIGNAL = [5, 9, 25]
+
+SEND_TEST_CONF_SIGNAL = [5, 15, 31]
+
+STOP_SIGNAL = [0]

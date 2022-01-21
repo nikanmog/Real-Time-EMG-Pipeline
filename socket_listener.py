@@ -11,26 +11,25 @@ CHUNK_SIZE = 1
 
 log = logging.getLogger("data-log")
 
-
 if __name__ == '__main__':
     print(sv.INFO_TEXT)
     client = sh.emg_client(tcp_port=TCP_PORT, hostname=HOSTNAME)  # Create TCP I/O socket
-    sh.send_default_configuration(client)  # Send configuration
+    sh.send_signal(client, sv.START_SIGNAL)  # Send configuration
 
     try:
         print(sv.STREAM_START_TEXT)
         print(CHANNEL_NUMBER, SAMPLE_RATE, CHUNK_SIZE, CHANNEL_NUMBER * SAMPLE_RATE * CHUNK_SIZE)
 
         while True:
-            data = sh.recvall(client, CHANNEL_NUMBER * SAMPLE_RATE * CHUNK_SIZE * 2)
+            data = sh.receive_signal(client, CHANNEL_NUMBER * SAMPLE_RATE * CHUNK_SIZE * 2)
             data = sh.convert_data_to_ints(data, True)
             log.info(data)
             print(data)
-        sh.stop_stream(client)
-        client.close()
     except Exception as e:
         print(e, sv.ERROR_TEXT)
+        sh.send_signal(client, sv.STOP_SIGNAL)
+        client.close()
     finally:
         print(sv.STREAM_CLOSE_TEXT)
-        sh.stop_stream(client)
+        sh.send_signal(client, sv.STOP_SIGNAL)
         client.close()
