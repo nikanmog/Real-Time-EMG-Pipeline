@@ -13,6 +13,14 @@ def emg_client(tcp_port: int, hostname: str) -> socket.socket:
     return client
 
 
+def send_signal(client: socket.socket, signal: list) -> None:
+    packet = bytearray(signal)
+    crc_calculator = CrcCalculator(Crc8.MAXIM_DOW)
+    packet.append(crc_calculator.calculate_checksum(packet))  # Add CRC-8
+    client.send(packet)
+    time.sleep(0.3)
+
+
 def receive_signal(client: socket.socket, n: int) -> bytearray:
     data = bytearray()
     while len(data) < n:
@@ -28,11 +36,3 @@ def convert_data_to_ints(data: bytearray, big_endian=True) -> tuple:
     fmt = ">" if big_endian else "<"
     fmt += "h" * int_count
     return struct.unpack(fmt, data[:int_count * 2])
-
-
-def send_signal(client: socket.socket, signal: list) -> None:
-    packet = bytearray(signal)
-    crc_calculator = CrcCalculator(Crc8.MAXIM_DOW)
-    packet.append(crc_calculator.calculate_checksum(packet))  # Add CRC-8
-    client.send(packet)
-    time.sleep(0.3)
