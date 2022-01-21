@@ -1,6 +1,7 @@
 import socket
 import struct
 import time
+from crc import CrcCalculator, Crc8
 
 
 def emg_client(tcp_port: int, hostname: str) -> socket.socket:
@@ -29,30 +30,36 @@ def convert_data_to_ints(data: bytearray, big_endian=True) -> tuple:
     return struct.unpack(fmt, data[:int_count * 2])
 
 
-def send_default_configuration(client: socket.socket):  # TODO Update
-    packet = bytearray()  # double([5;9;25;134]);
+def send_default_configuration(client: socket.socket):
+    crc_calculator = CrcCalculator(Crc8.MAXIM_DOW)
+    packet = bytearray()
     packet.append(5)
     packet.append(9)
     packet.append(25)
-    packet.append(134)  # CRC8
+    crc8 = crc_calculator.calculate_checksum(packet)
+    packet.append(crc8)
     client.send(packet)
     time.sleep(0.3)
     print(packet)
 
 
 def send_test_configuration(client: socket.socket):
-    packet = bytearray()  # double([5;15;31;241]);
-    packet.append(5)
+    crc_calculator = CrcCalculator(Crc8.MAXIM_DOW)
+    packet = bytearray()
+    packet.append(5)  # 5 Means: 00000101 -> 1 turns on stream, 10 = 2^1 = 2: Num of bytes that follow (except CRC8)
     packet.append(15)
     packet.append(31)
-    packet.append(241)  # CRC8
+    crc8 = crc_calculator.calculate_checksum(packet)
+    packet.append(crc8)
     client.send(packet)
     time.sleep(0.3)
 
 
 def stop_stream(client: socket.socket):
-    packet = bytearray()  # double([0;63]);
-    packet.append(0)
-    packet.append(63)  # CRC8
+    crc_calculator = CrcCalculator(Crc8.MAXIM_DOW)
+    packet = bytearray()
+    packet.append(0)  # 00000000 => Stop stream
+    crc8 = crc_calculator.calculate_checksum(packet)
+    packet.append(crc8)
     client.send(packet)
     time.sleep(0.3)

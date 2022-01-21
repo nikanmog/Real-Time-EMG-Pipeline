@@ -17,7 +17,6 @@ Server didn't respond with any data! Try restarting syncstation and probes! Chec
 """
 STREAM_START_TEXT = """
 Start streaming...
-Press q to quit
 Number of channels, Sampling rate, Streaming chunk size (sec), Total buffer size (words i.e. 2bytes):
 """
 STREAM_CLOSE_TEXT = """
