@@ -1,3 +1,13 @@
+TCP_PORT = 54320
+HOSTNAME = '192.168.76.1'
+CHANNEL = 82
+SAMPLE_RATE = 1
+CHUNK_SIZE = 1
+
+START_SIGNAL = [5, 9, 25]
+SEND_TEST_CONF_SIGNAL = [5, 15, 31]
+STOP_SIGNAL = [0]
+
 INFO_TEXT = """
 1) the white LED is related to wireless data transfer.
 2) the red LED highlights errors or problems.
@@ -23,9 +33,3 @@ STREAM_CLOSE_TEXT = """
 Stopping stream...
 Closing socket...
 """
-
-START_SIGNAL = [5, 9, 25]
-
-SEND_TEST_CONF_SIGNAL = [5, 15, 31]
-
-STOP_SIGNAL = [0]

@@ -22,14 +22,14 @@ def send_signal(client: socket.socket, signal: list) -> None:
     time.sleep(0.3)
 
 
-def receive_signal(client: socket.socket, n: int) -> bytearray:
+def receive_signal(client: socket.socket, n: int) -> tuple:
     data = bytearray()
     while len(data) < n:
         packet = client.recv(n - len(data))
         if not packet:
-            return bytearray()
+            return ()
         data.extend(packet)
-    return data
+    return convert_data_to_ints(data)
 
 
 def convert_data_to_ints(data: bytearray, big_endian=True) -> tuple:

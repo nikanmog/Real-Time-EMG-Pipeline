@@ -1,27 +1,23 @@
-import helpers.socket_helper as sh
-import helpers.socket_variables as sv
-
-TCP_PORT = 54320
-HOSTNAME = '192.168.76.1'
-CHANNEL_NUMBER = 82
-SAMPLE_RATE = 1
-CHUNK_SIZE = 1
+import helpers.communication as comm
+import helpers.data_storage as storage
+import helpers.environment_variables as env
 
 if __name__ == '__main__':
-    print(sv.INFO_TEXT)
-    client = sh.emg_client(tcp_port=TCP_PORT, hostname=HOSTNAME)  # Create TCP I/O socket
+    print(env.INFO_TEXT)
+    client = comm.emg_client(tcp_port=env.TCP_PORT, hostname=env.HOSTNAME)  # Create TCP I/O socket
 
     try:
-        sh.send_signal(client, sv.START_SIGNAL)  # Send configuration
-        print(sv.STREAM_START_TEXT)
-        print(CHANNEL_NUMBER, SAMPLE_RATE, CHUNK_SIZE, CHANNEL_NUMBER * SAMPLE_RATE * CHUNK_SIZE)
+        comm.send_signal(client, env.START_SIGNAL)  # Send configuration
+        print(env.STREAM_START_TEXT)
+        print(env.CHANNEL, env.SAMPLE_RATE, env.CHUNK_SIZE, env.CHANNEL * env.SAMPLE_RATE * env.CHUNK_SIZE)
 
         while True:
-            data = sh.receive_signal(client, CHANNEL_NUMBER * SAMPLE_RATE * CHUNK_SIZE * 2)
-            data = sh.convert_data_to_ints(data)
+            data = comm.receive_signal(client, env.CHANNEL * env.SAMPLE_RATE * env.CHUNK_SIZE * 2)
+            storage.add_recording(data)
     except Exception as e:
-        print(e, sv.ERROR_TEXT)
+        print(e, env.ERROR_TEXT)
     finally:
-        print(sv.STREAM_CLOSE_TEXT)
-        sh.send_signal(client, sv.STOP_SIGNAL)
+        print(env.STREAM_CLOSE_TEXT)
+        comm.send_signal(client, env.STOP_SIGNAL)
         client.close()
+        storage.persist_recordings()
