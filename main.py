@@ -1,7 +1,7 @@
-# Source https://github.com/miladinovic/OTbioelettronica_LSL
+import pandas as pd
+
 import helpers.socket_helper as sh
 import helpers.socket_variables as sv
-import pandas as pd
 
 TCP_PORT = 54320
 HOSTNAME = '192.168.76.1'
@@ -22,7 +22,7 @@ if __name__ == '__main__':
 
         while True:
             data = sh.receive_signal(client, CHANNEL_NUMBER * SAMPLE_RATE * CHUNK_SIZE * 2)
-            data = sh.convert_data_to_ints(data, True)
+            data = sh.convert_data_to_ints(data)
             dataframe.append(data)
     except Exception as e:
         print(e, sv.ERROR_TEXT)

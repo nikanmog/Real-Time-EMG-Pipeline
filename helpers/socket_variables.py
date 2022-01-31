@@ -11,8 +11,8 @@ INFO_TEXT = """
 """
 
 ERROR_TEXT = """
-Server didn't respond with any data! Try restarting syncstation and probes! Check out the LEDs!
-- 1 & 2 green led on syncstation must be ON
+Server didn't respond with any data! Try restarting sync station and probes! Check out the LEDs!
+- 1 & 2 green led on sync station must be ON
 - no red blinking on probes 1 and 2 should be present, present single blink means DATA_LOSS, triple blinking LOW_BATTERY
 """
 STREAM_START_TEXT = """

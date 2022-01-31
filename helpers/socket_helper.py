@@ -1,6 +1,7 @@
 import socket
 import struct
 import time
+
 from crc import CrcCalculator, Crc8
 
 
@@ -26,7 +27,7 @@ def receive_signal(client: socket.socket, n: int) -> bytearray:
     while len(data) < n:
         packet = client.recv(n - len(data))
         if not packet:
-            return None
+            return bytearray()
         data.extend(packet)
     return data
 
