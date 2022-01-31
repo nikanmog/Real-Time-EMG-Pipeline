@@ -10,9 +10,9 @@ CHUNK_SIZE = 1
 if __name__ == '__main__':
     print(sv.INFO_TEXT)
     client = sh.emg_client(tcp_port=TCP_PORT, hostname=HOSTNAME)  # Create TCP I/O socket
-    sh.send_signal(client, sv.START_SIGNAL)  # Send configuration
 
     try:
+        sh.send_signal(client, sv.START_SIGNAL)  # Send configuration
         print(sv.STREAM_START_TEXT)
         print(CHANNEL_NUMBER, SAMPLE_RATE, CHUNK_SIZE, CHANNEL_NUMBER * SAMPLE_RATE * CHUNK_SIZE)
 
