@@ -1,5 +1,4 @@
 import socket
-import struct
 import time
 
 from crc import CrcCalculator, Crc8
@@ -14,7 +13,7 @@ def emg_client(tcp_port: int, hostname: str) -> socket.socket:
     return client
 
 
-def send_signal(client: socket.socket, signal: list) -> None:
+def send_signal(client: socket.socket, signal: list[int]) -> None:
     packet = bytearray(signal)
     crc_calculator = CrcCalculator(Crc8.MAXIM_DOW)
     packet.append(crc_calculator.calculate_checksum(packet))  # Add CRC-8
@@ -22,18 +21,7 @@ def send_signal(client: socket.socket, signal: list) -> None:
     time.sleep(0.3)
 
 
-def receive_signal(client: socket.socket, n: int) -> tuple:
-    data = bytearray()
-    while len(data) < n:
-        packet = client.recv(n - len(data))
-        if not packet:
-            return ()
-        data.extend(packet)
-    return convert_data_to_ints(data)
-
-
-def convert_data_to_ints(data: bytearray, big_endian=True) -> tuple:
-    int_count = len(data) // 2  # bytes long
-    fmt = ">" if big_endian else "<"
-    fmt += "h" * int_count
-    return struct.unpack(fmt, data[:int_count * 2])
+def receive_signal(client: socket.socket, n: int) -> list[int]:
+    packet = client.recv(n)
+    int_data = [int.from_bytes(packet[i:i + 2], byteorder='big') for i in range(0, len(packet), 2)]
+    return int_data

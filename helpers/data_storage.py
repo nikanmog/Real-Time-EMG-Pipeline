@@ -9,7 +9,7 @@ COLUMN_NAMES = [str(x) for x in range(CHANNELS - 6)]
 COLUMN_NAMES.extend(["IMU_W", "IMU_X", "IMU_Y", "IMU_Z", "Buffer_Usage", "Counter"])
 
 
-def add_recording(data: tuple):
+def add_recording(data: list[int]):
     recording_buffer.append(data)
 
 
