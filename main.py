@@ -14,6 +14,8 @@ if __name__ == '__main__':
         while True:
             data = comm.receive_signal(client, env.CHANNELS * env.SAMPLE_RATE * env.CHUNK_SIZE * 2)
             storage.add_recording(data)
+    except KeyboardInterrupt as e:
+        pass
     except Exception as e:
         print(e, env.ERROR_TEXT)
     finally:
