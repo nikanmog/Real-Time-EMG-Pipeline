@@ -9,10 +9,10 @@ if __name__ == '__main__':
     try:
         comm.send_signal(client, env.START_SIGNAL)  # Send configuration
         print(env.STREAM_START_TEXT)
-        print(env.CHANNEL, env.SAMPLE_RATE, env.CHUNK_SIZE, env.CHANNEL * env.SAMPLE_RATE * env.CHUNK_SIZE)
+        print(env.CHANNELS, env.SAMPLE_RATE, env.CHUNK_SIZE, env.CHANNELS * env.SAMPLE_RATE * env.CHUNK_SIZE)
 
         while True:
-            data = comm.receive_signal(client, env.CHANNEL * env.SAMPLE_RATE * env.CHUNK_SIZE * 2)
+            data = comm.receive_signal(client, env.CHANNELS * env.SAMPLE_RATE * env.CHUNK_SIZE * 2)
             storage.add_recording(data)
     except Exception as e:
         print(e, env.ERROR_TEXT)

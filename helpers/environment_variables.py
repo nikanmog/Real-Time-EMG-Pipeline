@@ -1,12 +1,14 @@
 TCP_PORT = 54320
 HOSTNAME = '192.168.76.1'
-CHANNEL = 76
+CHANNELS = 76
 SAMPLE_RATE = 1
 CHUNK_SIZE = 1
 
-START_BYTE = int('00001011', 2)
-MUOVI_5_CONTROL_BYTE = int('01001001', 2)
-START_SIGNAL = [START_BYTE, 0, 0, 0, 0, MUOVI_5_CONTROL_BYTE]
+# Read more in the docs "SyncStation - communication protocol.pdf"
+START_BYTE = int('00001011', 2)  # Defines which channels are active, more info in docs
+MUOVI_PLUS_5_CONTROL_BYTE = int('01001001', 2)
+MUOVI_PLUS_6_CONTROL_BYTE = int('01011001', 2)
+START_SIGNAL = [START_BYTE, 0, 0, 0, 0, MUOVI_PLUS_5_CONTROL_BYTE]
 STOP_SIGNAL = [0]
 
 INFO_TEXT = """
