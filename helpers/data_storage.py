@@ -17,4 +17,4 @@ def persist_recordings():
     dataframe = pd.DataFrame(data=recording_buffer, columns=COLUMN_NAMES)
     timestamp = datetime.now().strftime("%Y-%m-%d-%H:%M:%S")
     print(dataframe.head(10))
-    dataframe.to_feather("data/" + timestamp)
+    dataframe.to_parquet("data/" + timestamp + ".parquet")
