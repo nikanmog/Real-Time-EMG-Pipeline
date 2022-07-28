@@ -1,0 +1,15 @@
+name: ml_env
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pip:
+      - tensorflow~=2.9.0
+      - pandas~=1.4.2
+      - pyarrow~=8.0.0
+      - plotly~=5.8.0
+      - numpy~=1.22.3
+      - scikit-learn~=1.1.1
+      - crc~=1.2.0
+      - pyqtgraph
+      - PyQt6

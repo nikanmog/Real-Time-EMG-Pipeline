@@ -1,25 +1,28 @@
-import helpers.communication as comm
-import helpers.data_storage as storage
 import helpers.environment_variables as env
+from helpers.communication import receive_signal, send_signal, get_emg_client
+from helpers.prediction import get_prediction
+from helpers.visualization import plot_force
 
-if __name__ == '__main__':
-    print(env.INFO_TEXT)
-    client = comm.emg_client(tcp_port=env.TCP_PORT, hostname=env.HOSTNAME)  # Create TCP I/O socket
 
+def main():
+    client = get_emg_client(tcp_port=env.TCP_PORT, hostname=env.HOSTNAME)
     try:
-        comm.send_signal(client, env.START_SIGNAL)  # Send configuration
-        print(env.STREAM_START_TEXT)
-        print(env.CHANNELS, env.SAMPLE_RATE, env.CHUNK_SIZE, env.CHANNELS * env.SAMPLE_RATE * env.CHUNK_SIZE)
-
+        send_signal(client, env.START_SIGNAL)
         while True:
-            data = comm.receive_signal(client, env.CHANNELS * env.SAMPLE_RATE * env.CHUNK_SIZE * 2)
-            storage.add_recording(data)
-    except KeyboardInterrupt as e:
+            data = receive_signal(client, env.CHANNELS * env.SAMPLE_RATE * env.CHUNK_SIZE * 2)
+            print(data)  # data = np.random.rand(128)
+            prediction = get_prediction(data)
+            plot_force(prediction)
+
+    except KeyboardInterrupt:
         pass
     except Exception as e:
         print(e, env.ERROR_TEXT)
     finally:
-        print(env.STREAM_CLOSE_TEXT)
-        comm.send_signal(client, env.STOP_SIGNAL)
+        print(env.STREAM_TEXT)
+        send_signal(client, env.STOP_SIGNAL)
         client.close()
-        storage.persist_recordings()
+
+
+if __name__ == '__main__':
+    main()

@@ -1,4 +1,0 @@
-pandas~=1.4.0
-crc~=1.1.2
-pyarrow~=6.0.1
-matplotlip~=0.2

@@ -1,13 +1,18 @@
-# Thesis-sEMG-Pipeline
+# EMG Interface
 
 ## Installation
 
 * Tested with Python 3.10, PyCharm is recommended as an IDE
-* Install requirements with pip (venv recommended)
+* Install requirements with conda
 
-Run this in the project repository (where the requirements.txt is located) with your terminal (global python
-installation required)
+For Windows / Linux:
 
 ```
-pip install -r requirements.txt
+conda env create -f ml_env.yml
+```
+
+For Mac:
+
+```
+conda env create -f mac_ml_env.yml
 ```
