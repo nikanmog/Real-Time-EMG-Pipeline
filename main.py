@@ -5,21 +5,20 @@ from helpers.visualization import plot_force
 
 
 def main():
-    client = get_emg_client(tcp_port=env.TCP_PORT, hostname=env.HOSTNAME)
+    client = get_emg_client(tcp_port=env.SS_TCP_PORT, hostname=env.SS_HOSTNAME)
     try:
-        send_signal(client, env.START_SIGNAL)
+        send_signal(client, env.SS_START_SIGNAL)
         while True:
-            data = receive_signal(client, env.CHANNELS * env.SAMPLE_RATE * env.CHUNK_SIZE * 2)
-            print(data)  # data = np.random.rand(128)
+            data = receive_signal(client)
             prediction = get_prediction(data)
             plot_force(prediction)
 
     except KeyboardInterrupt:
         pass
     except Exception as e:
-        print(e, env.ERROR_TEXT)
+        print(e)
     finally:
-        print(env.STREAM_TEXT)
+        print("Stream Closed")
         send_signal(client, env.STOP_SIGNAL)
         client.close()
 

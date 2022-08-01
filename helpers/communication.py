@@ -13,7 +13,7 @@ def get_emg_client(tcp_port: int, hostname: str) -> socket.socket:
     :param hostname: Hostname of EMG Client
     :return: Socket which represents the EMG Client
     """
-    print(env.INFO_TEXT)
+    print(f"{env.CHANNELS} channels")
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client.settimeout(5)
     ip = socket.gethostbyname(hostname)
@@ -28,22 +28,22 @@ def send_signal(client: socket.socket, signal: list[int]) -> None:
     :param client: Initialized EMG client
     :param signal: Byte signal that will be transmitted to the EMG device
     """
-    print(env.STREAM_TEXT)
-    print(env.CHANNELS, env.SAMPLE_RATE, env.CHUNK_SIZE, env.CHANNELS * env.SAMPLE_RATE * env.CHUNK_SIZE)
     packet = bytearray(signal)
     crc_calculator = CrcCalculator(Crc8.MAXIM_DOW)
     packet.append(crc_calculator.calculate_checksum(packet))  # Add CRC-8
     client.send(packet)
-    time.sleep(0.3)
+    time.sleep(0.5)
 
 
-def receive_signal(client: socket.socket, n: int) -> list[int]:
+def receive_signal(client: socket.socket) -> list[int]:
     """
     Use this method to get signals from the EMG device
     :param client: Initialized EMG client
     :param n: Length of the expected signal
     :return: Signal converted to an integer array
     """
+    n = env.CHANNELS * 2  # 216 for QC
+
     packet = client.recv(n)
     int_data = [int.from_bytes(packet[i:i + 2], byteorder='big') for i in range(0, len(packet), 2)]
     return int_data
